@@ -3,6 +3,6 @@
 
 (defn api []
   ["" [["/" (yada "Resistance is futile!")]
-       ["/observations" (yada "hello")]
+       ["/observations" (yada {:msg "hello"})]
        [true (fn [req] {:status 404 :body "404"})]]])
 
