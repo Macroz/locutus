@@ -1,17 +1,15 @@
 (ns locutus.server
   (:require [aleph.http :as http]
-            [bidi.vhosts :refer [vhosts-model make-handler]]
-            [yada.yada :as yada :refer [yada]]
             [mount.core :refer [defstate]]
             [locutus.config :refer [config]]
             [locutus.api :as api]))
 
 (defn start-server []
-  (let [port (:port config)
-        model (vhosts-model
-               [[{:scheme :http :host (str "localhost:" port)}]
-                (api/api)])]
-    (http/start-server (make-handler model) {:port port :raw-stream? true})))
+  (let [scheme :http
+        host "localhost"
+        port (:port config)]
+    (http/start-server (api/handler scheme host port)
+                       {:port port :raw-stream? true})))
 
 (defn stop-server [server]
   (.close server))
