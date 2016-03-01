@@ -19,8 +19,8 @@
 
 (defn start-netty-mqtt-broker []
   (let [ch (chan 32)
-        broker (make-channel-handler ch)]
-    {:channel ch :broker broker}))
+        handler (make-channel-handler ch)]
+    {:channel ch :handler handler}))
 
 (defn stop-netty-mqtt-broker [broker]
   (when (:channel broker)
