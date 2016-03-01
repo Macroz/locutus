@@ -1,9 +1,11 @@
 (ns locutus.api
   (:require [bidi.vhosts :as bidi]
-            [yada.yada :as yada :refer [yada]]))
+            [yada.yada :as yada :refer [yada]]
+            [locutus.beacon :as beacon]))
 
 (defn api []
   ["" [["/" (yada "Resistance is futile!")]
+       ["/beacons" (yada beacon/known-beacons)]
        ["/observations" (yada {:msgs ["We are the borg."]})]
        [true (fn [req] {:status 404 :body "404"})]]])
 
