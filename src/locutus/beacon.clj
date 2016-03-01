@@ -1,7 +1,7 @@
 (ns locutus.beacon)
 
 (def known-beacons
-  {"ec00fb52-740a-40f6-aa96-2d4d8120c567" :hsl})
+  [{:id "ec00fb52-740a-40f6-aa96-2d4d8120c567" :tags [:hsl]}])
 
 (defn distance [tx-power rssi]
   (Math/pow 10 (* 0.05 (- tx-power rssi))))
