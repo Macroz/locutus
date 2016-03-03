@@ -1,6 +1,6 @@
 (defproject macroz/locutus "0.1.0"
-  :description "Resistance is futile."
-  :url "http://example.com/FIXME"
+  :description "The collective knows where you are."
+  :url "http://github.com/Macroz/locutus"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.7.0"]
