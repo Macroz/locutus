@@ -9,6 +9,7 @@
                  [bidi "2.0.0"]
                  [yada "1.1.0-20160225.101107-28"]
                  [org.clojure/data.json "0.2.6"]
+                 [org.clojure/core.async "0.2.374"]
                  [mount "0.1.9"]]
   :repl-options {:init-ns user
                  :welcome (println "Resistance is futile!")}
