@@ -1,14 +1,34 @@
 (ns locutus.api
-  (:require [aleph.http :as http]
+  (:require [clojure.core.async :as async]
+            [aleph.http :as http]
             [manifold.stream :as s]
             [bidi.vhosts :as bidi]
             [yada.yada :as yada :refer [yada]]
             [locutus.beacon :as beacon]))
 
+(defn read-mqtt-fixed-header [[h l]]
+  {:type (bit-shift-right (bit-and 240 h) 4)
+   :flags (bit-and 15 h)
+   :length l})
+
+(defn to-bin [b]
+  (.replaceAll (format "%8s" (Integer/toBinaryString b)) " " "0"))
+
 (defn websocket-handler [req]
-  (let [s @(http/websocket-connection req)]
-    (println "Got ws!")
-    (s/connect s s)))
+  (println req)
+  (let [s @(http/websocket-connection req)
+        in-ch (async/chan)
+        out-ch (async/chan)]
+    (println "Connected ws!")
+    (s/connect s in-ch)
+    (s/connect out-ch s)
+    (async/go-loop []
+      (let [x (async/<! in-ch)]
+        (when x
+          (println "data" (map to-bin x))
+          (println "head" (read-mqtt-fixed-header (take 2 x)))
+          (async/>! out-ch (str "hello " x))
+          (recur))))))
 
 (defn api []
   ["" [["/ws" websocket-handler]
