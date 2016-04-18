@@ -10,3 +10,5 @@ pom.xml.asc
 .hgignore
 .hg/
 *~
+moquette.log
+moquette_store.mapdb*
