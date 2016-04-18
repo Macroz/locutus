@@ -1,31 +1,22 @@
 (ns locutus.broker
   (:require [clojure.core.async :refer [put! chan go-loop <! close!]]
             [mount.core :refer [defstate]]
-            [locutus.config :refer [config]])
-  (:import (io.netty.channel ChannelHandlerAdapter)))
+            [locutus.config :refer [config]]
+            [locutus.util :refer [map->stringify-all]]
+            [clojurewerkz.propertied.properties :as p])
+  (:import (io.moquette.server Server)))
 
-(defn make-channel-handler [ch]
-  (println "Starting channel handler!")
-  (let [close-ch (chan)]
-    (go-loop []
-      (let [x (<! ch)]
-        (if x
-          (do (println "Got" x)
-              (recur))
-          (put! close-ch true))))
-    (go-loop []
-      (<! close-ch)
-      (println "Stopping channel handler!"))))
+(defn start-moquette-mqtt-broker []
+  (let [server (Server.)
+        config (map->stringify-all (:moquette config))
+        properties (p/load-from config)]
+    (.startServer server properties)
+    {:server server}))
 
-(defn start-netty-mqtt-broker []
-  (let [ch (chan 32)
-        handler (make-channel-handler ch)]
-    {:channel ch :handler handler}))
+(defn stop-moquette-mqtt-broker [broker]
+  (when-let [server (:server broker)]
+    (.stopServer server)))
 
-(defn stop-netty-mqtt-broker [broker]
-  (when (:channel broker)
-    (close! (:channel broker))))
-
-(defstate netty-mqtt-broker
-  :start (start-netty-mqtt-broker)
-  :stop (stop-netty-mqtt-broker netty-mqtt-broker))
+(defstate moquette-mqtt-broker
+  :start (start-moquette-mqtt-broker)
+  :stop (stop-moquette-mqtt-broker moquette-mqtt-broker))
