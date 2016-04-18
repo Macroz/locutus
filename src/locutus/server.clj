@@ -8,6 +8,7 @@
   (let [scheme :http
         host "localhost"
         port (:port config)]
+    (println "Starting server at port" port)
     (http/start-server (api/handler scheme host port)
                        {:port port :raw-stream? true})))
 
