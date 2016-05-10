@@ -16,6 +16,8 @@
   :repositories [["jcenter" "http://jcenter.bintray.com/"]]
   :repl-options {:init-ns user
                  :welcome (println "Resistance is futile!")}
-  :profiles {:dev {:dependencies [[org.clojure/clojure "1.7.0"]
+  :profiles {:dev {:dependencies [[org.clojure/clojure "1.8.0"]
                                   [ring-mock "0.1.5" :exclusions [commons-codec]]]
-                   :source-paths ["dev"]}})
+                   :source-paths ["dev"]}
+             :uberjar {:aot :all}}
+  :main locutus.core)
