@@ -5,10 +5,10 @@
             [locutus.api :as api]))
 
 (defn start-server []
-  (let [scheme :http
-        host "localhost"
+  (let [scheme (:scheme config)
+        host (:host config)
         port (:port config)]
-    (println "Starting server at port" port)
+    (println "Starting server" host "at port" port)
     (http/start-server (api/handler scheme host port)
                        {:port port :raw-stream? true})))
 
