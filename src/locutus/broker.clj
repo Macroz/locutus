@@ -9,7 +9,11 @@
 (defn start-moquette-mqtt-broker []
   (let [server (Server.)
         config (map->stringify-all (:moquette config))
-        properties (p/load-from config)]
+        properties (p/load-from config)
+        host (:host (:moquette config))
+        port (:port (:moquette config))
+        ws-port (:websocket_port (:moquette config))]
+    (println "Starting Moquette" host "at port" port "ws at" ws-port)
     (.startServer server properties)
     {:server server}))
 
